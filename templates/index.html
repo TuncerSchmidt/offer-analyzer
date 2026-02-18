@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Smart Offer Analyzer</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #f4f6f8;
+            padding: 40px;
+        }
+        .container {
+            max-width: 700px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+        button {
+            background: linear-gradient(135deg, #34d399, #10b981);
+            color: white;
+            padding: 14px;
+            width: 100%;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(16, 185, 129, 0.3);
+        }
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+
+
+        .result {
+            margin-top: 25px;
+            padding: 20px;
+            background: #f1f1f1;
+            border-radius: 8px;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Smart Offer Analyzer</h1>
+
+        <form method="post" action="/analyze">
+            <label>Salary</label>
+            <input type="number" name="salary" required>
+
+            <label>Bonus</label>
+            <input type="number" name="bonus">
+
+            <label>Healthcare Cost</label>
+            <input type="number" name="healthcare_cost">
+
+            <label>Retirement %</label>
+            <input type="number" name="retirement_percent" value="5">
+
+            <button type="submit">Analyze Offer</button>
+        </form>
+
+        {% if result %}
+        <div class="result">
+            <h3>Results</h3>
+            <p>Total Income: ${{ result.total_income }}</p>
+            <p>Federal Tax: ${{ result.federal_tax }}</p>
+            <p>Retirement Contribution: ${{ result.retirement_contribution }}</p>
+            <h2>Net Income: ${{ result.net_income }}</h2>
+        </div>
+        {% endif %}
+        <hr>
+        <h2>W2 vs Contractor Comparison</h2>
+
+        <form method="post" action="/compare">
+            <label>W2 Salary</label>
+            <input type="number" name="w2_salary" required>
+
+            <label>Contractor Hourly Rate</label>
+            <input type="number" name="contractor_rate" required>
+
+            <label>Hours Per Year (ex: 2000)</label>
+            <input type="number" name="hours_per_year" value="2000" required>
+
+            <label>State</label>
+            <select name="state" required>
+                <option value="NY">New York</option>
+                <option value="CA">California</option>
+                <option value="TX">Texas</option>
+                <option value="FL">Florida</option>
+            </select>
+
+            <label>PTO Days</label>
+            <input type="number" name="pto_days" value="15" required>
+
+            <label>Healthcare Cost</label>
+            <input type="number" name="healthcare_cost" required>
+
+            <label>Retirement %</label>
+            <input type="number" name="retirement_percent" value="5" required>
+
+            <label>Employer Match %</label>
+            <input type="number" name="employer_match_percent" value="4" required>
+
+            <button type="submit">Compare Offers</button>
+        </form>
+
+
+        {% if comparison %}
+        <div class="result">
+            <h3>Comparison Results</h3>
+            <p>Contractor Net: ${{ comparison.contractor_net }}</p>
+            <p>W2 Net: ${{ comparison.w2_net }}</p>
+
+            {% if comparison.contractor_net > comparison.w2_net %}
+                <h2>Contractor earns more</h2>
+            {% else %}
+                <h2>W2 earns more</h2>
+            {% endif %}
+        </div>
+        {% endif %}
+
+    </div>
+</body>
+</html>
