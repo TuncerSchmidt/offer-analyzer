@@ -3,3 +3,4 @@ uvicorn
 reportlab
 python-multipart
 jinja2
+stripe
